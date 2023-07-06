@@ -1,3 +1,10 @@
+<?php
+
+$statusSendingMessage = verifyFormMessage();
+
+if ($statusSendingMessage !== NULL) toast($statusSendingMessage, 'sendmessage');
+
+?>
 <section>
     <h2>Messages</h2>
     <div class="">

@@ -1,6 +1,18 @@
 <?php
 
+require_once('errors-messages.php');
 require_once('models.php');
+
+/* ** Affiche un message de notification dans la page.
+* Affiche les messages de succès et d'erreurs.
+* */
+function toast($status, $action) {
+  global $errorsList;
+
+  $message = $errorsList[$action][$status];
+
+  include('includes/toast.php');
+}
 
 /* ** Affiche les vues dans index.php
 * 
@@ -49,7 +61,7 @@ function showAllMessages() {
             include('includes/single-message.php');
         }
     } else {
-        include('includes/no-messages.hp');
+        include('includes/no-messages.php');
     }
 }
 
@@ -70,6 +82,27 @@ function showConnectedUsers() {
     }
 
     return $HTMLUsers;
+}
+
+/* ** 
+* */
+function verifyFormMessage() {
+  $pseudoIsOk = (isset($_POST['pseudo']) && !empty($_POST['pseudo']));
+  $messageIsOk = (isset($_POST['message']) && !empty($_POST['message']));
+
+  if (count($_POST) > 0) {
+    if ($pseudoIsOk && $messageIsOk) {
+      $messageIsSaved = createNewMessage($_POST['pseudo'], $_POST['message']);
+
+      if ($messageIsSaved === 0) {
+        return 0;
+      }
+
+      return 2;
+    } else {
+      return 1;
+    }
+  }
 }
 
 ?>
