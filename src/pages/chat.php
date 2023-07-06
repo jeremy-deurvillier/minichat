@@ -1,8 +1,13 @@
 <section>
     <h2>Messages</h2>
-    <div class=""></div>
+    <div class="">
+        <?php showAllMessages(); ?>
+    </div>
 </section>
 <aside>
     <h2>Membres connectés</h2>
-    <div class=""></div>
+    <div class="">
+        <?= showConnectedUsers(); ?>
+    </div>
 </aside>
+<?php include('../includes/message-form.php'); ?>
