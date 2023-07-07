@@ -1,6 +1,5 @@
 <?php
 
-$statusSendingMessage = verifyFormMessage();
 
 if ($statusSendingMessage !== NULL) toast($statusSendingMessage, 'sendmessage');
 

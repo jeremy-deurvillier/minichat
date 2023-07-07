@@ -1,3 +1,10 @@
+<?php
+
+session_start();
+
+$statusSendingMessage = verifyFormMessage();
+
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

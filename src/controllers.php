@@ -1,7 +1,10 @@
 <?php
 
 require_once('errors-messages.php');
+require_once('vendor/RandomColor.php');
 require_once('models.php');
+
+use \Colors\RandomColor;
 
 /* ** Affiche un message de notification dans la page.
 * Affiche les messages de succès et d'erreurs.
@@ -87,18 +90,43 @@ function showConnectedUsers() {
 /* ** 
 * */
 function verifyFormMessage() {
+  $userIsSaved;
+  $lastUserId;
+  $currentUser;
+
   $pseudoIsOk = (isset($_POST['pseudo']) && !empty($_POST['pseudo']));
   $messageIsOk = (isset($_POST['message']) && !empty($_POST['message']));
 
   if (count($_POST) > 0) {
-    if ($pseudoIsOk && $messageIsOk) {
-      $messageIsSaved = createNewMessage($_POST['pseudo'], $_POST['message']);
+      if ($pseudoIsOk && $messageIsOk) {
+          $currentUser = userExist($_POST['pseudo']);
+      
+          if ($currentUser === false) {
+              $userIsSaved = createUser($_POST['pseudo'], RandomColor::one());
 
-      if ($messageIsSaved === 0) {
-        return 0;
-      }
+              if ($userIsSaved === 0) {
+                  $lastUserId = getLastIDInsert('id_user', 'users');
+                  $ipIsSaved = createNewIpAddress($lastUserId);
+var_dump($ipIsSaved);
+                  //setcookie('user_pseudo', $_POST['pseudo'], time()+3600);
+                  //setcookie('user_id', $lastUserId, time()+3600);
+                  $_SESSION['user_pseudo'] = $_POST['pseudo'];
+                  $_SESSION['user_id'] = $lastUserId;
+              }
+          } else {
+              $_SESSION['user_pseudo'] = $currentUser['pseudo'];
+              $_SESSION['user_id'] = $currentUser['id_user'];
+              //setcookie('user_pseudo', $currentUser['pseudo'], time()+3600);
+              //setcookie('user_id', $currentUser['id_user'], time()+3600);
+          }
 
-      return 2;
+          $messageIsSaved = createNewMessage($_POST['message'], $_SESSION['user_id']);
+
+          if ($messageIsSaved === 0) {
+            return 0;
+          }
+
+          return 2;
     } else {
       return 1;
     }

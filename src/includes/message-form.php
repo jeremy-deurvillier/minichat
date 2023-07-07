@@ -1,7 +1,12 @@
+<?php
+
+$pseudo = (isset($_SESSION['user_pseudo']))?$_SESSION['user_pseudo']:'';
+
+?>
 <form action="/" method="post">
 
     <label for="pseudo">Pseudo :</label>
-    <input type="text" name="pseudo" value="">
+    <input type="text" name="pseudo" value="<?= $pseudo ?>">
 
     <label for="message">Message :</label>
     <input type="text" name="message" value="">
