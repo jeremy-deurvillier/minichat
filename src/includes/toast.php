@@ -1,5 +1,5 @@
 <p class="toast">
-  <?= $message; ?>
+  <span><?= $message; ?></span>
 
   <button class="close">x</button>
 </p>

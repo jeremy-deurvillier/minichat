@@ -8,6 +8,9 @@ use \Colors\RandomColor;
 
 /* ** Affiche un message de notification dans la page.
 * Affiche les messages de succès et d'erreurs.
+* 
+* @param Int $status Un code d'erreur ou de succès.
+* @param String $action L'action qui à générer l'erreur (send message, connexion, inscription)
 * */
 function toast($status, $action) {
   global $errorsList;
@@ -68,9 +71,11 @@ function showAllMessages() {
     }
 }
 
-/* ** Affiche la liste des membres dans la page chat.php
-* Seuls les memnres actis sont affichés, 
+/* ** Affiche la liste des utlisateurs dans la page chat.php
+* Seuls les utilisateurs actifs sont affichés, 
 * c-a-d les membres ayant envoyés un message dans les 5 dernières minutes.
+*
+* @return HTMLNodeList Un noeud DOM à insérer dans la page.
 * */
 function showConnectedUsers() {
     $HTMLUsers = '';
@@ -78,7 +83,7 @@ function showConnectedUsers() {
 
     if (count($connectedMembers) > 0) {
         foreach($connectedMembers as $user) {
-            $HTMLUsers .= '<p>' . $user['pseudo'] . '</p>';
+            $HTMLUsers .= '<p class="user" data-usercolor="' . $user['color'] . '">' . $user['pseudo'] . '</p>';
         }
     } else {
         $HTMLUsers .= '<p>Aucun utilisateur connecté pour le moment.</p>';
@@ -87,7 +92,9 @@ function showConnectedUsers() {
     return $HTMLUsers;
 }
 
-/* ** 
+/* ** Vérifie le formulaire d'envoi de message dans le tchat.
+* 
+* @return Int Un code d'erreur ou de succès.
 * */
 function verifyFormMessage() {
   $userIsSaved;
@@ -107,17 +114,13 @@ function verifyFormMessage() {
               if ($userIsSaved === 0) {
                   $lastUserId = getLastIDInsert('id_user', 'users');
                   $ipIsSaved = createNewIpAddress($lastUserId);
-var_dump($ipIsSaved);
-                  //setcookie('user_pseudo', $_POST['pseudo'], time()+3600);
-                  //setcookie('user_id', $lastUserId, time()+3600);
+
                   $_SESSION['user_pseudo'] = $_POST['pseudo'];
                   $_SESSION['user_id'] = $lastUserId;
               }
           } else {
               $_SESSION['user_pseudo'] = $currentUser['pseudo'];
               $_SESSION['user_id'] = $currentUser['id_user'];
-              //setcookie('user_pseudo', $currentUser['pseudo'], time()+3600);
-              //setcookie('user_id', $currentUser['id_user'], time()+3600);
           }
 
           $messageIsSaved = createNewMessage($_POST['message'], $_SESSION['user_id']);

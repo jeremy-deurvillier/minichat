@@ -3,6 +3,8 @@
 require_once('db-connect.php');
 
 /* ** Sélectionne tous les messages.
+* 
+* @return Array Un tableau contenant la liste des messages du tchat.
 * */
 function getAllMessages() {
     $db = dbConnect();
@@ -19,6 +21,8 @@ function getAllMessages() {
 }
 
 /* ** Sélectionne les utilisateurs ayant envoyer un message dans les 5 dernières minutes.
+* 
+* @return Array Un tableau contenant la liste des utilisateurs ayant envoyer un message dans le 5 dernières minutes.
 * */
 function getConnectedUsers() {
     $db = dbConnect();
@@ -31,7 +35,11 @@ function getConnectedUsers() {
     return $allUsers;
 }
 
-/* ** 
+/* ** Vérifie si un utilisateur existe.
+* 
+* @param String $pseudo Un pseudo à tester.
+*
+* @return Array|Boolean Un tableau contenant les informations d'un utilisateur s'il existe, false sinon.
 * */
 function userExist($pseudo) {
     $db = dbConnect();
@@ -46,7 +54,12 @@ function userExist($pseudo) {
     return $user;
 }
 
-/* ** 
+/* ** Récupère le dernier id auto-incrémenté d'un table.
+* 
+* @param String $column Le nom de la colonne auto-incrémenté à sélectionner.
+* @param String $table Le nom de la table sur laquelle travailler.
+*
+* @return Int Le dernier id auto-incrémenté d'une table.
 * */
 function getLastIDInsert($column, $table) {
     $db = dbConnect();
@@ -57,7 +70,12 @@ function getLastIDInsert($column, $table) {
     return $lastId['id'];
 }
 
-/* ** */
+/* ** Crée une nouvelle adresse IP dans la base.
+* 
+* @param Int $user L'id unique d'un utilisateur.
+*
+* @return Int Un code d'erreur ou de succès.
+* */
 function createNewIpAddress($user) {
     $db = dbConnect();
 
@@ -79,7 +97,13 @@ function createNewIpAddress($user) {
     }
 }
 
-/* ** 
+/* ** Crée un nouvel utilisateur dans la base.
+* 
+* @param String $pseudo Le pseudo de l'utilisateur.
+* @param String $color La couleur par défaut de l'utilisateur.
+* @param String $password Le mot de passe de l'utilisateur. Par défaut, vaut 'null'.
+*
+* @return Int Retourne toujours 0.
 * */
 function createUser($pseudo, $color, $password = 'null') {
     $db = dbConnect();
@@ -93,22 +117,18 @@ function createUser($pseudo, $color, $password = 'null') {
     return 0;
 }
 
-/* ** 
+/* ** Crée un nouveau message.
+* 
+* @param String $msg Le message d'un utilisateur.
+* @param Int $user L'id unique d'un utilisateur.
+*
+* @return Int Un code d'erreur ou de succès.
 * */
 function createNewMessage($msg, $user) {
   $db = dbConnect();
-  //$lastUserId;
   $lastMessageId;
 
   try {
-    //if (!userExist($pseudo)) {
-      //$requestUsers = $db->prepare('INSERT INTO users (pseudo, create_at, color) VALUES (:pseudo, NOW(), :color)');
-      //$requestUsers->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
-      //$requestUsers->bindValue(':color', $color, PDO::PARAM_STR);
-      //$requestUsers->execute();
-
-      //$lastUserId = getLastIDInsert('id_user', 'users');
-
       $requestMessages = $db->prepare('INSERT INTO messages (message) VALUES (:message)');
       $requestMessages->bindValue(':message', $msg, PDO::PARAM_STR);
       $requestMessages->execute();
@@ -121,9 +141,6 @@ function createNewMessage($msg, $user) {
       $requestUsersMessages->execute();
 
       return 0;
-    /*} else {
-      return 2;
-      }*/
   } catch (Exception $error) {
     return 1;
   }
