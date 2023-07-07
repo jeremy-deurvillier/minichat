@@ -6,10 +6,9 @@
                 <li><a href="index.php?page=login">Connexion</a></li>
             </ul>
         </nav>
-        <p>Minichat - 2023 - Tous droits réservés</p>
+        <p>Minichat 2023 - Tous droits réservés</p>
     </footer>
     <!-- JS SCRIPTS -->
-    <script src="/js/requests.js"></script>
     <script src="/js/main.js"></script>
 </body>
 </html>
